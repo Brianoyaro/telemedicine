@@ -1,11 +1,11 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, BooleanField, SubmitField
 from wtforms.validators import DataRequired, EqualTo, Email, ValidationError
-from app.models import Users
+from app.models import Hospital
 
 
 class LoginForm(FlaskForm):
-    """Login form"""
+    """Hospital Login form"""
     email = StringField('email', validators=[DataRequired(), Email()])
     password = StringField('password', validators=[DataRequired()])
     remember_me = BooleanField('Remember Me')
@@ -14,6 +14,7 @@ class LoginForm(FlaskForm):
 
 class RegistrationForm(FlaskForm):
     """registration form"""
+    name = StringField('Name', validators=[DataRequired()])
     email = StringField('Email', validators=[DataRequired(), Email()])
     password = StringField('Password', validators=[DataRequired()])
     password2 = StringField('Confirm Password', validators=[DataRequired(), EqualTo('password')])
@@ -22,6 +23,6 @@ class RegistrationForm(FlaskForm):
 
     def validate_email(self, email):
         """to make sure email is unique before storing in database"""
-        user = Users.query.filter_by(email=email.data).first()
+        user = Hospital.query.filter_by(email=email.data).first()
         if user:
             raise ValidationError('Please use a different email')
